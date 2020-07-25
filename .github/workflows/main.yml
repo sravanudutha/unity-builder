@@ -104,14 +104,23 @@ jobs:
         uses: andymckay/get-gist-action@master
         with:
           gistURL: 'https://gist.github.com/frostebite/58fdeb02d45f6e7a24bcbe36f6bdc051'
-      - id: read-k8s-config
-        run: |
-          chmod +x ${{ steps.get.outputs.file }}
-          ${{ steps.get.outputs.file }} ${{ env.GKE_PROJECT }} ${{ env.GKE_CLUSTER }} ${{ env.GKE_ZONE }}
-          gcloud container clusters get-credentials $GKE_CLUSTER \
-            --zone $GKE_ZONE --project $GKE_PROJECT
-          # run a command to get access-token
-          kubectl version
+      - uses: nick-invision/retry@v1
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: |
+            chmod +x ${{ steps.get.outputs.file }};
+            ${{ steps.get.outputs.file }} ${{ env.GKE_PROJECT }} ${{ env.GKE_CLUSTER }} ${{ env.GKE_ZONE }};
+            gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $GKE_PROJECT;
+            # run a command to get access-token
+            kubectl version;
+            cat <<EOF | kubectl apply -f -
+            apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: lock-test
+            data:
+              test
       - uses: frostebite/File-To-Base64@master
         id: read-base64
         with:
