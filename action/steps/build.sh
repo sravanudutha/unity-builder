@@ -120,11 +120,11 @@ xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
     -customBuildPath "$CUSTOM_BUILD_PATH" \
     -executeMethod "$BUILD_METHOD" \
     -version "$VERSION" \
-    -androidVersionCode "$ANDROID_VERSION_CODE" \
-    -androidKeystoreName "$ANDROID_KEYSTORE_NAME" \
-    -androidKeystorePass "$ANDROID_KEYSTORE_PASS" \
-    -androidKeyaliasName "$ANDROID_KEYALIAS_NAME" \
-    -androidKeyaliasPass "$ANDROID_KEYALIAS_PASS" \
+    -androidVersionCode "5" \
+    -androidKeystoreName "android" \
+    -androidKeystorePass "android" \
+    -androidKeyaliasName "android" \
+    -androidKeyaliasPass "android" \
     $CUSTOM_PARAMETERS
 
 # Catch exit code
